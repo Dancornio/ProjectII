@@ -1,0 +1,7 @@
+{
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.inlineSuggest.edits.renderSideBySide": "never",
+    "editor.inlineSuggest.edits.codeShifting": false,
+    "editor.acceptSuggestionOnCommitCharacter": true,
+    "editor.inlineSuggest.enabled": false
+}
