@@ -1,4 +1,4 @@
-#estou usando a IA para aprender, se acalme seu boizão
+
 
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -8,13 +8,11 @@ import json
 
 import os
 
-# Carregar variáveis de ambiente (se ainda não carregadas globalmente)
 from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(__file__), 'app', '.env'))
 
 app = Flask(__name__)
 
-# Configuração similar à do seu __init__.py
 config_name = os.getenv('FLASK_CONFIG') or 'default'
 if config_name == 'development':
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DEV_DATABASE_URL') or 'postgresql://postgres:5RfSfPgu8MNmXK70@db.ashvqjaitdywtfugxgsj.supabase.co:5432/postgres'
@@ -30,8 +28,7 @@ db = SQLAlchemy(app)
 def test_connection():
     try:
         with app.app_context():
-            # Tenta executar uma query simples. 
-            # Em PostgreSQL, `SELECT 1` é uma forma comum de verificar a conexão.
+            
             db.session.execute(db.text('SELECT 1'))
         print("Conexão com o banco de dados bem-sucedida!")
     except OperationalError as e:
@@ -43,19 +40,16 @@ def test_connection():
 def consulta():
     try:
         with app.app_context():
-            # Sua query específica
+           
             query_string = text('SELECT * FROM category WHERE id = 3;')
             result = db.session.execute(query_string)
             
-            # Para obter os resultados:
-            # fetchall() retorna uma lista de tuplas (ou RowProxy objects)
             rows = result.fetchall()
             
             if rows:
                 print("Resultado da query:")
                 for row in rows:
-                    # Você pode acessar as colunas pelo índice ou pelo nome se forem RowProxy
-                    # Exemplo: print(f"ID: {row[0]}, Nome: {row[1]}") - ajuste os índices/nomes conforme sua tabela
+                    
                     print(row) 
             else:
                 print("Nenhum resultado encontrado para a query.")
@@ -101,7 +95,6 @@ def insert_category(category_nome):
         print(f"Erro de SQL (verifique se a tabela 'category' e a coluna 'name' existem): {e}")
         return None
     except OperationalError as e:
-        # Não precisa de rollback aqui, pois a conexão pode ter falhado antes da transação
         print(f"Erro de conexão com o banco de dados: {e}")
         return None
     except Exception as e:
@@ -113,12 +106,11 @@ def inserir_custumer(password, email, cpf, nome ):
     try:
         with app.app_context():
             query_string = text("INSERT INTO customer (password, email, cpf, name) VALUES (:password, :email, :cpf, :name)")
-            # Correção aqui:
             db.session.execute(query_string, {"password": password, "email": email, "cpf": cpf, "name": nome})
             db.session.commit()
             print(f"cliente '{nome}' criado com sucesso")
     except IntegrityError as e:
-        db.session.rollback() # Desfaz a transação em caso de erro (ex: nome duplicado se houver constraint UNIQUE)
+        db.session.rollback()
         print(f"Erro de integridade ao inserir categoria (ex: nome já existe?): {e}")
         return None
     except ProgrammingError as e:
@@ -126,7 +118,6 @@ def inserir_custumer(password, email, cpf, nome ):
         print(f"Erro de SQL (verifique se a tabela 'category' e a coluna 'name' existem): {e}")
         return None
     except OperationalError as e:
-        # Não precisa de rollback aqui, pois a conexão pode ter falhado antes da transação
         print(f"Erro de conexão com o banco de dados: {e}")
         return None
     except Exception as e:
@@ -147,3 +138,4 @@ def get_categories():
 
 if __name__ == '__main__':
     get_categories()
+    inserir_custumer('senha123', 'vini@mail.com', '09092121', 'Vini')

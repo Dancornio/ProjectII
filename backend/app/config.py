@@ -16,7 +16,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'postgresql://user:password@host/dbname_dev' # Atualizado para PostgreSQL
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'postgresql://postgres:5RfSfPgu8MNmXK70@db.ashvqjaitdywtfugxgsj.supabase.co:5432/postgres' # Atualizado para PostgreSQL
 
 class ProductionConfig(Config):
     DEBUG = False
