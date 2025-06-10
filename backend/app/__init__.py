@@ -30,11 +30,29 @@ def create_app(config_name = 'default'):
 
     with app.app_context():
         # --- REGISTRO DOS BLUEPRINTS (ROTAS) ---
+        from app.routes.customer_routes import customers_bp
+        app.register_blueprint(customers_bp, url_prefix='/api/customers')
+
         from app.routes.category_routes import categories_bp
         app.register_blueprint(categories_bp, url_prefix='/api/categories')
 
+        from app.routes.address_routes import addresses_bp
+        app.register_blueprint(addresses_bp, url_prefix='/api/customers')
 
+        from app.routes.phone_routes import phones_bp
+        app.register_blueprint(phones_bp, url_prefix='/api/customers')
 
+        from app.routes.product_routes import products_bp
+        app.register_blueprint(products_bp, url_prefix='/api/products')
+
+        from app.routes.parcel_routes import parcels_bp
+        app.register_blueprint(parcels_bp, url_prefix='/api/parcels')
+
+        from app.routes.item_product_routes import item_products_bp
+        app.register_blueprint(item_products_bp, url_prefix='/api/parcels')
+
+        from app.routes.cart_routes import cart_bp
+        app.register_blueprint(cart_bp, url_prefix='/api/customers')
     # Registrar manipuladores de erro
     #from app.middleware.error_handler import register_error_handlers
     #register_error_handlers(app)

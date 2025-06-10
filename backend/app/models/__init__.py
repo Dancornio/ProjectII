@@ -1,9 +1,12 @@
-from .user import User
+
 from .category import Category
+from .customer import Customer
+from .address import Address
+from .phone import Phone
 from .product import Product
-from .order import Order, OrderStatus
-from .order_item import OrderItem
-from .cart import CartItem
+from .parcel import Parcel
+from .item_product import ItemProduct
+from .cart import Cart
 
 __all__ = [
     'User',

@@ -1,37 +1,31 @@
 from app import db
-from datetime import datetime
+from sqlalchemy.sql import func
 
 class Product(db.Model):
-    __tablename__ = 'products'
+    """
+    Representa a tabela 'product' no banco de dados.
+    """
+    __tablename__ = 'product'
     
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-    description = db.Column(db.Text)
+    name = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    # Usando Numeric para representar dinheiro, que é uma prática recomendada.
     price = db.Column(db.Numeric(10, 2), nullable=False)
-    stock_quantity = db.Column(db.Integer, default=0)
-    sku = db.Column(db.String(100), unique=True)
-    image_url = db.Column(db.String(255))
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
-    is_active = db.Column(db.Boolean, default=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    stock = db.Column(db.Integer, nullable=False)
+    image = db.Column(db.Text, nullable=True)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
     
-    # Relacionamentos
-    order_items = db.relationship('OrderItem', backref='product', lazy=True)
-    cart_items = db.relationship('CartItem', backref='product', lazy=True)
+    # Chave estrangeira para a tabela 'category'
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'price': float(self.price),
-            'stock_quantity': self.stock_quantity,
-            'sku': self.sku,
-            'image_url': self.image_url,
-            'category_id': self.category_id,
-            'category_name': self.category.name if self.category else None,
-            'is_active': self.is_active,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
-        }
+    # Timestamps que são gerenciados automaticamente pelo banco de dados
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    
+    # Relacionamento para acessar o objeto Category diretamente de um Produto
+    category = db.relationship('Category', backref=db.backref('products', lazy=True))
+
+    def __repr__(self):
+        """Representação do objeto para debug."""
+        return f'<Product {self.name}>'
